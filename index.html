@@ -2,216 +2,721 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>سوق إسنا الالكترونى</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>سوق إسنا الالكتروني | متجر رقمي احترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Reem+Kufi+Fun:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --primary-gold: #C2A56D; 
-            --dark-blue: #2C3947;    
-            --light-bg: #E8EDF2;     
-            --white: #ffffff; 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #C9A84C; --gold-light: #F0D080; --gold-dark: #9A7530;
+            --navy: #1A2535; --navy-light: #243145; --navy-mid: #2E3F55;
+            --bg: #F2F4F7; --bg-card: #FFFFFF; --text: #1A2535;
+            --text-muted: #6B7A8D; --border: #E2E8F0;
+            --red: #E53E3E; --green: #38A169; --orange: #E8893E;
+            --radius: 16px;
+            --shadow: 0 4px 24px rgba(26,37,53,0.08);
+            --shadow-hover: 0 12px 40px rgba(26,37,53,0.15);
+            --shadow-modal: 0 25px 50px -12px rgba(0,0,0,0.4);
         }
-        body { background: var(--light-bg); font-family: 'Tajawal', sans-serif; margin: 0; padding: 0; }
-        
-        #splash-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            z-index: 9999; transition: opacity 0.8s ease;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Temple_of_Esna.jpg/1024px-Temple_of_Esna.jpg'); 
-            background-size: cover; background-position: center;
-        }
-        #splash-screen::after {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(44, 57, 71, 0.85); backdrop-filter: blur(8px); z-index: 1;
-        }
-        #splash-screen > * { position: relative; z-index: 2; }
-        #splash-screen h1 { color: var(--primary-gold); font-family: 'Reem Kufi', sans-serif; font-size: 3.5em; margin: 0; }
-        #splash-screen p { color: #fff; font-size: 1.2em; margin: 10px 0; opacity: 0.9; }
-        #splash-screen .loading-text { color: var(--primary-gold); font-size: 1em; font-weight: bold; margin-bottom: 15px; }
-        
-        .loader-bar { width: 200px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
-        .loader-progress { width: 0%; height: 100%; background: var(--primary-gold); animation: load 2s forwards; }
-        @keyframes load { to { width: 100%; } }
+        body { background: var(--bg); font-family: 'Cairo', sans-serif; color: var(--text); min-height: 100vh; }
 
-        header { background: var(--dark-blue); color: var(--primary-gold); padding: 25px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        header h1 { margin: 0; font-family: 'Reem Kufi', sans-serif; font-size: 2.5em; letter-spacing: 2px; }
-        header .sub-header { color: #fff; font-size: 1.1em; margin-top: 5px; }
+        /* SPLASH */
+        #splash {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: var(--navy); transition: opacity 0.8s ease;
+        }
+        #splash::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Temple_of_Esna.jpg/1024px-Temple_of_Esna.jpg');
+            background-size: cover; background-position: center; opacity: 0.08;
+        }
+        .splash-logo { font-family: 'Reem Kufi Fun', sans-serif; font-size: 4rem; color: var(--gold); letter-spacing: 4px; position: relative; animation: splashFadeIn 0.8s ease forwards; }
+        .splash-logo span { color: white; }
+        .splash-sub { color: rgba(255,255,255,0.6); font-size: 1rem; margin-top: 8px; position: relative; animation: splashFadeIn 1s 0.3s ease both; }
+        .splash-bar-wrap { width: 200px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-top: 40px; position: relative; }
+        .splash-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold-dark), var(--gold-light)); border-radius: 2px; animation: splashLoad 2s ease forwards; }
+        @keyframes splashLoad { to { width: 100%; } }
+        @keyframes splashFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .container { padding: 20px; max-width: 1200px; margin: auto; }
-        #productsGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
-        .card { background: var(--white); border-radius: 20px; padding: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.4s; border: 1px solid #eee; text-align: center; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-        .card img { width: 100%; height: 200px; object-fit: contain; border-radius: 15px; cursor: pointer; }
-        .card h3 { color: var(--dark-blue); margin: 15px 0 5px; }
-        .price { color: var(--primary-gold); font-weight: bold; font-size: 1.2em; margin-bottom: 15px; }
-        .add-card { border: 2px dashed var(--primary-gold); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 300px; background: rgba(194, 165, 109, 0.05); transition: 0.3s; }
-        .add-card:hover { background: rgba(194, 165, 109, 0.1); }
-        .btn { background: var(--dark-blue); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background: var(--primary-gold); }
-        
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; padding: 15px; overflow-y: auto;}
-        .modal-content { background: var(--white); padding: 30px; border-radius: 25px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        
-        .detail-item { background: #f9f9f9; padding: 12px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #eee; text-align: right; font-weight: bold; color: #333; }
-        .contact-title { font-weight: 900; color: var(--dark-blue); margin: 20px 0 10px; font-size: 1.2em; }
-        .contact-icons { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 15px; }
-        .contact-icons a { color: var(--dark-blue); transition: 0.3s; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        .contact-icons a:hover { color: var(--primary-gold); transform: scale(1.1); }
-        
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; direction: rtl; text-align: right; }
-        
-        .viewer-container { position: relative; display: inline-block; max-width: 90%; max-height: 90%; }
-        .close-btn { position: absolute; top: 10px; left: 10px; background: red; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; font-size: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 1001; }
-        #fullImage { max-width: 100%; max-height: 80vh; border-radius: 15px; border: 3px solid white; display: block; object-fit: contain; }
+        /* TOPBAR */
+        #topbar {
+            background: var(--navy); padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        .logo { font-family: 'Reem Kufi Fun', sans-serif; font-size: 1.7rem; color: var(--gold); letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
+        .logo img { height: 42px; width: 42px; object-fit: contain; border-radius: 8px; }
+        .logo span { color: white; font-size: 0.8em; }
+        .search-wrap {
+            position: absolute; left: 50%; transform: translateX(-50%); width: 340px;
+            display: flex; align-items: center;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+        }
+        .search-wrap:focus-within { border-color: var(--gold); }
+        .search-wrap input { flex: 1; background: none; border: none; padding: 10px 16px; color: white; font-family: 'Cairo', sans-serif; font-size: 0.9rem; outline: none; direction: rtl; text-align: right; }
+        .search-wrap input::placeholder { color: rgba(255,255,255,0.4); }
+        .search-wrap .fa-search { color: rgba(255,255,255,0.4); padding: 0 14px; }
+        .add-btn { background: var(--gold); color: var(--navy); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 0.9rem; white-space: nowrap; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .add-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+        /* CATEGORIES */
+        .cats-section { background: var(--bg-card); border-bottom: 1px solid var(--border); position: sticky; top: 64px; z-index: 90; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .cats-scroll { display: flex; overflow-x: auto; gap: 4px; padding: 12px 20px; scrollbar-width: none; }
+        .cats-scroll::-webkit-scrollbar { display: none; }
+        .cat-pill { flex-shrink: 0; display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 50px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; white-space: nowrap; }
+        .cat-pill:hover { border-color: var(--gold); color: var(--gold); }
+        .cat-pill.active { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+
+        /* MAIN */
+        .main-wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px; }
+        .filters-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+        .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+        .chip { padding: 6px 18px; border-radius: 40px; border: 1px solid var(--border); background: white; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .chip:hover { border-color: var(--gold); color: var(--gold-dark); background: #FFF8E7; }
+        .chip.active { background: var(--gold); color: var(--navy); border-color: var(--gold); box-shadow: 0 2px 8px rgba(201,168,76,0.3); }
+
+        /* GRID */
+        #productsGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+
+        /* CARD */
+        .card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); transition: all 0.3s ease; cursor: pointer; position: relative; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        .card-img-wrap { position: relative; overflow: hidden; aspect-ratio: 4/3; background: #f5f7fa; }
+        .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .card:hover .card-img-wrap img { transform: scale(1.05); }
+        .badge-condition { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; backdrop-filter: blur(8px); background: rgba(0,0,0,0.65); color: white; }
+        .badge-new { background: rgba(56,161,105,0.9); color: white; }
+        .badge-used { background: rgba(232,137,62,0.95); color: white; }
+        .badge-cat { position: absolute; top: 10px; left: 10px; background: rgba(26,37,53,0.85); color: var(--gold); padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; backdrop-filter: blur(6px); }
+        .card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; }
+        .card-name { font-weight: 800; font-size: 1rem; color: var(--text); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-seller { color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: flex; align-items: center; gap: 5px; }
+        .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+        .card-price { font-size: 1.25rem; font-weight: 900; color: var(--navy); }
+        .card-price span { font-size: 0.7rem; color: var(--text-muted); font-weight: 400; }
+        .card-cta { background: var(--navy); color: var(--gold); border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.8rem; font-weight: 700; transition: 0.2s; }
+        .card-cta:hover { background: var(--gold); color: var(--navy); }
+
+        /* ADD CARD */
+        .add-card { background: var(--bg-card); border: 2px dashed var(--gold); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 280px; transition: 0.3s; gap: 12px; }
+        .add-card:hover { background: rgba(201,168,76,0.05); transform: translateY(-4px); }
+        .add-icon-wrap { width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .add-card .fa-plus { font-size: 1.5rem; color: var(--gold); }
+        .add-card p { color: var(--gold); font-weight: 700; font-size: 0.95rem; }
+
+        /* EMPTY STATE */
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; opacity: 0.3; margin-bottom: 16px; display: block; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(10,15,26,0.8); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; padding: 20px; overflow-y: auto; }
+        .modal.open { display: flex; }
+        @keyframes modalSlideUp { from { opacity: 0; transform: scale(0.96) translateY(30px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-box { background: var(--bg-card); border-radius: 32px; width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-modal); animation: modalSlideUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); position: relative; scrollbar-width: thin; }
+        .modal-box::-webkit-scrollbar { width: 6px; }
+        .modal-box::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
+        .modal-box::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        .modal-header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); padding: 22px 28px; border-radius: 32px 32px 0 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(201,168,76,0.2); }
+        .modal-header h3 { color: var(--gold); font-family: 'Reem Kufi Fun', sans-serif; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .modal-header h3 i { font-size: 1.3rem; background: rgba(201,168,76,0.2); padding: 8px; border-radius: 50%; }
+        .modal-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--gold-light); font-size: 1.2rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { background: rgba(201,168,76,0.2); transform: rotate(90deg); color: white; }
+        .modal-body { padding: 28px 28px 32px; }
+        .form-group { margin-bottom: 22px; }
+        .form-label { font-weight: 800; font-size: 0.85rem; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .form-label i { color: var(--gold); font-size: 0.9rem; width: 20px; }
+        .req { color: var(--red); font-size: 1rem; margin-right: 4px; }
+        .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 14px; font-family: 'Cairo', sans-serif; font-size: 0.95rem; background: #FAFCFE; transition: all 0.2s; direction: rtl; text-align: right; }
+        .form-control:focus { border-color: var(--gold); background: white; outline: none; box-shadow: 0 0 0 3px rgba(201,168,76,0.2); }
+        textarea.form-control { resize: vertical; min-height: 90px; }
+        .radio-group { display: flex; gap: 16px; margin-top: 6px; }
+        .radio-opt { flex: 1; background: #FAFCFE; border: 2px solid var(--border); border-radius: 18px; padding: 14px 8px; cursor: pointer; text-align: center; transition: all 0.2s; position: relative; }
+        .radio-opt input { position: absolute; opacity: 0; }
+        .radio-opt .ri { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+        .radio-opt .rl { font-size: 0.85rem; font-weight: 800; color: var(--text-muted); }
+        .radio-opt.sel-new { border-color: var(--green); background: linear-gradient(145deg, #F0FFF4, #ffffff); box-shadow: 0 6px 14px rgba(56,161,105,0.12); }
+        .radio-opt.sel-new .rl { color: var(--green); }
+        .radio-opt.sel-used { border-color: var(--orange); background: linear-gradient(145deg, #FFF7F0, #ffffff); box-shadow: 0 6px 14px rgba(232,137,62,0.1); }
+        .radio-opt.sel-used .rl { color: var(--orange); }
+        .img-upload-area { border: 2px dashed var(--border); border-radius: 20px; padding: 24px 20px; text-align: center; cursor: pointer; transition: 0.25s; background: #FAFCFE; }
+        .img-upload-area:hover { border-color: var(--gold); background: rgba(201,168,76,0.03); transform: translateY(-2px); }
+        .img-upload-area i { font-size: 2.2rem; color: var(--gold); opacity: 0.8; margin-bottom: 10px; }
+        .img-upload-area p { font-size: 0.85rem; color: var(--text-muted); }
+        #mainImgPreview { width: 100%; max-height: 150px; object-fit: contain; border-radius: 16px; margin-top: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: none; border: 1px solid var(--border); }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 20px 0 24px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn-primary { width: 100%; padding: 14px; background: linear-gradient(105deg, var(--navy), var(--navy-light)); color: var(--gold); border: none; border-radius: 18px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; letter-spacing: 0.3px; margin-top: 8px; box-shadow: 0 4px 12px rgba(26,37,53,0.2); font-family: 'Cairo', sans-serif; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(26,37,53,0.3); color: var(--gold-light); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .btn-secondary { width: 100%; padding: 12px; background: #F1F3F7; border: 1px solid var(--border); border-radius: 18px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 12px; color: var(--text-muted); font-family: 'Cairo', sans-serif; }
+        .btn-secondary:hover { background: #E9ECF2; border-color: var(--gold); color: var(--navy); }
+
+        /* DETAILS MODAL */
+        .detail-modal-box { background: var(--bg-card); border-radius: 32px; width: 100%; max-width: 540px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-modal); animation: modalSlideUp 0.3s ease; }
+        .detail-img-wrap { position: relative; aspect-ratio: 16/9; background: #eef2f5; flex-shrink: 0; }
+        .detail-img-wrap img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .detail-img-close { position: absolute; top: 12px; left: 12px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); border: none; color: white; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+        .detail-badge-wrap { position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; }
+        .detail-scrollable { overflow-y: auto; padding: 20px 24px 24px; }
+        .detail-title { font-size: 1.5rem; font-weight: 900; color: var(--text); }
+        .detail-price { font-size: 1.9rem; font-weight: 900; color: var(--navy); margin-top: 6px; }
+        .detail-section { margin-top: 20px; }
+        .detail-section-title { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+        .detail-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .detail-info-item { background: var(--bg); border-radius: 14px; padding: 10px 14px; }
+        .detail-info-item .dil { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+        .detail-info-item .div { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+        .detail-desc { background: var(--bg); border-radius: 14px; padding: 14px; line-height: 1.7; font-size: 0.9rem; }
+        .gallery-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+        .gallery-thumb { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 2px solid transparent; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
+        .gallery-thumb:hover { border-color: var(--gold); }
+        .contact-section { background: var(--navy); border-radius: 20px; padding: 16px; margin-top: 20px; }
+        .contact-label { color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+        .contact-btns { display: flex; gap: 10px; }
+        .contact-btn { flex: 1; padding: 12px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: 0.2s; font-family: 'Cairo', sans-serif; font-size: 0.9rem; }
+        .contact-btn.whatsapp { background: #25D366; color: white; }
+        .contact-btn.whatsapp:hover { background: #1eb659; }
+        .contact-btn.phone { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .contact-btn.phone:hover { background: rgba(255,255,255,0.2); }
+
+        /* IMAGE VIEWER */
+        #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; cursor: zoom-out; }
+        #imageViewer.open { display: flex; }
+        #fullImage { max-width: 92vw; max-height: 88vh; border-radius: 20px; }
+        .viewer-close { position: fixed; top: 20px; right: 20px; width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 50%; border: none; color: white; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* TOAST */
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--navy); color: white; padding: 12px 26px; border-radius: 60px; font-weight: 700; z-index: 9998; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; display: flex; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); font-family: 'Cairo', sans-serif; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* LOADING SKELETON */
+        .skeleton { background: linear-gradient(90deg, #e8ecf0 25%, #f5f7fa 50%, #e8ecf0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius); }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-card { height: 280px; border-radius: var(--radius); }
+
+        @media (max-width: 640px) {
+            .search-wrap { max-width: 150px; }
+            .form-row { grid-template-columns: 1fr; }
+            .modal-body { padding: 20px; }
+            .logo span { display: none; }
+        }
     </style>
 </head>
 <body>
 
-<div id="splash-screen">
-    <h1>سوق إسنا</h1>
-    <p>أول سوق إلكتروني رقمي</p>
-    <div class="loading-text">جاري التحميل</div>
-    <div class="loader-bar"><div class="loader-progress"></div></div>
+<!-- SPLASH -->
+<div id="splash">
+    <div class="splash-logo">سوق <span>إسنا</span></div>
+    <div class="splash-sub">أول سوق إلكتروني رقمي في إسنا</div>
+    <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
 </div>
 
-<header>
-    <h1>سوق إسنا</h1>
-    <div class="sub-header">أول سوق إلكتروني رقمي</div>
-</header>
+<!-- TOPBAR -->
+<div id="topbar">
+    <div class="logo">
+        <img src="logo.png" alt="لوجو سوق إسنا" onerror="this.style.display='none'">
+        سوق <span>إسنا الإلكتروني</span>
+    </div>
+    <div class="search-wrap">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" id="searchInput" placeholder="ابحث عن منتج..." oninput="filterProducts()">
+    </div>
+    <button class="add-btn" onclick="openAddModal()">
+        <i class="fa-solid fa-plus"></i>
+        <span>إضافة منتج</span>
+    </button>
+</div>
 
-<div class="container">
+<!-- CATEGORIES BAR -->
+<div class="cats-section">
+    <div class="cats-scroll" id="catsBar"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+    <div class="filters-row">
+        <div class="filter-chips">
+            <div class="chip active" onclick="setCondFilter('all', this)">الكل</div>
+            <div class="chip" onclick="setCondFilter('جديد', this)">🟢 جديد</div>
+            <div class="chip" onclick="setCondFilter('مستعمل', this)">🟠 مستعمل</div>
+        </div>
+    </div>
     <div id="productsGrid">
-        <div class="add-card" onclick="document.getElementById('addModal').style.display='flex'">
-            <i class="fa-solid fa-plus" style="font-size: 50px; color: var(--primary-gold);"></i>
-            <h3 style="color:var(--primary-gold)">إضافة منتج جديد</h3>
+        <!-- سكيلتون تحميل -->
+        <div class="add-card" onclick="openAddModal()">
+            <div class="add-icon-wrap"><i class="fa-solid fa-plus"></i></div>
+            <p>إضافة منتج جديد</p>
+        </div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+    </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal" id="addModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="fa-regular fa-square-plus"></i> إضافة منتج جديد</h3>
+            <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-image"></i> الصورة الرئيسية <span class="req">*</span></label>
+                <div class="img-upload-area" onclick="document.getElementById('mainImgInput').click()">
+                    <input type="file" id="mainImgInput" accept="image/*" style="display:none" onchange="previewMain(this)">
+                    <i class="fa-solid fa-cloud-upload-alt"></i>
+                    <p>اضغط لاختيار الصورة الرئيسية</p>
+                    <img id="mainImgPreview">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-regular fa-tag"></i> اسم المنتج <span class="req">*</span></label>
+                    <input type="text" id="name" class="form-control" placeholder="مثال: هاتف آيفون 13">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fa-solid fa-coins"></i> السعر (ج.م) <span class="req">*</span></label>
+                    <input type="number" id="price" class="form-control" placeholder="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-list-alt"></i> الفئة <span class="req">*</span></label>
+                <select id="category" class="form-control">
+                    <option value="">-- اختر فئة --</option>
+                    <option>الإلكترونيات</option><option>الأزياء</option><option>المنزل</option>
+                    <option>الجمال</option><option>الموبايلات</option><option>السيارات</option>
+                    <option>الرياضة</option><option>الأطفال</option><option>الأغذية</option>
+                    <option>الخدمات</option><option>العقارات</option><option>الوظائف</option>
+                    <option>مستعمل</option><option>أخرى</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-star"></i> حالة المنتج <span class="req">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-opt" id="optNew" onclick="selectCondition('جديد')">
+                        <input type="radio" name="condition" value="جديد">
+                        <span class="ri">✨</span><span class="rl">جديد</span>
+                    </label>
+                    <label class="radio-opt" id="optUsed" onclick="selectCondition('مستعمل')">
+                        <input type="radio" name="condition" value="مستعمل">
+                        <span class="ri">🔄</span><span class="rl">مستعمل</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-file-lines"></i> تفاصيل المنتج</label>
+                <textarea id="details" class="form-control" placeholder="اكتب وصفاً واضحاً للمنتج ..."></textarea>
+            </div>
+            <div class="divider"></div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-user"></i> بيانات البائع</label>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">الاسم <span class="req">*</span></label>
+                    <input type="text" id="seller" class="form-control" placeholder="اسمك الكامل">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">رقم الهاتف <span class="req">*</span></label>
+                    <input type="tel" id="phone" class="form-control" placeholder="01XXXXXXXXX">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-brands fa-whatsapp"></i> رقم الواتساب</label>
+                <input type="tel" id="whatsapp" class="form-control" placeholder="01XXXXXXXXX">
+            </div>
+            <div class="divider"></div>
+            <div class="form-group">
+                <label class="form-label"><i class="fa-regular fa-images"></i> صور إضافية</label>
+                <div class="img-upload-area" onclick="document.getElementById('galleryInput').click()">
+                    <input type="file" id="galleryInput" accept="image/*" multiple style="display:none">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <p>اختر صور إضافية (اختياري) - يمكنك اختيار أكثر من صورة</p>
+                </div>
+            </div>
+            <button class="btn-primary" id="uploadBtn" onclick="uploadProduct()">
+                <i class="fa-regular fa-paper-plane"></i> نشر المنتج
+            </button>
+            <button class="btn-secondary" onclick="closeModal('addModal')">
+                <i class="fa-regular fa-circle-xmark"></i> إغلاق
+            </button>
         </div>
     </div>
 </div>
 
-<div id="addModal" class="modal">
-    <div class="modal-content">
-        <h3>بيانات المنتج</h3>
-        <input type="file" id="mainImgInput" accept="image/*">
-        <input type="text" id="name" placeholder="اسم المنتج">
-        <input type="number" id="price" placeholder="السعر">
-        <textarea id="details" placeholder="التفاصيل"></textarea>
-        <input type="text" id="seller" placeholder="اسم البائع">
-        <input type="tel" id="phone" placeholder="رقم الهاتف">
-        <input type="tel" id="whatsapp" placeholder="رقم الواتساب">
-        <label style="display:block; text-align:right;">صور إضافية:</label>
-        <input type="file" id="galleryInput" accept="image/*" multiple>
-        <button class="btn" id="uploadBtn" onclick="uploadProduct()">نشر المنتج</button>
-        <button class="btn" style="background:#888; margin-top:10px;" onclick="document.getElementById('addModal').style.display='none'">إغلاق</button>
+<!-- DETAILS MODAL -->
+<div class="modal" id="detailsModal">
+    <div class="detail-modal-box">
+        <div class="detail-img-wrap">
+            <img id="detailMainImg" onclick="openImage(this.src)">
+            <button class="detail-img-close" onclick="closeModal('detailsModal')">✕</button>
+            <div class="detail-badge-wrap" id="detailBadges"></div>
+        </div>
+        <div class="detail-scrollable" id="detailsContent"></div>
     </div>
 </div>
 
-<div id="detailsModal" class="modal">
-    <div class="modal-content" id="detailsContent"></div>
+<!-- IMAGE VIEWER -->
+<div id="imageViewer" onclick="closeViewer()">
+    <button class="viewer-close" onclick="closeViewer()">✕</button>
+    <img id="fullImage">
 </div>
 
-<div id="imageViewer" class="modal">
-    <div class="viewer-container">
-        <div class="close-btn" onclick="document.getElementById('imageViewer').style.display='none'">×</div>
-        <img id="fullImage">
-    </div>
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <i class="fa-solid fa-check-circle"></i>
+    <span id="toastMsg"></span>
 </div>
 
 <script>
-    const IMGBB_KEY = "70da390a22af7d2bb175bb823a671cd4";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz19Q70vl3iLpKQJbj6tDKt7xrLpeUWRo407miWnSuEn7EJljPir5_DtIXB2JHKYGEnXw/exec";
-    let allProductsData = [];
+    // ===== الإعدادات الأساسية =====
+    const IMGBB_KEY  = "70da390a22af7d2bb175bb823a671cd4";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby6Hv7mp3SErsj-g9HwX1cuZ8zjHKiwSGZdkQDMQ_Ecz6e3Box9Wril_ieaj8our7wqjQ/exec";
 
-    async function init() {
-        try {
-            let res = await fetch(SCRIPT_URL);
-            allProductsData = await res.json();
-            allProductsData.forEach((row, i) => {
-                if(i > 0 && row[8] == 1) {
-                    document.getElementById('productsGrid').innerHTML += `
-                        <div class="card">
-                            <img src="${row[0]}" onclick="openImage('${row[0]}')">
-                            <h3>${row[1]}</h3>
-                            <div class="price">${row[2]} ج.م</div>
-                            <button class="btn" onclick="showDetails(${i})">عرض التفاصيل</button>
-                        </div>`;
-                }
-            });
-            document.getElementById('splash-screen').style.opacity = '0';
-            setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 800);
-        } catch(e) { console.error(e); }
-    }
+    // ===== مخطط الأعمدة في الشيت =====
+    // index 0  → mainImg       (رابط الصورة الرئيسية)
+    // index 1  → name          (اسم المنتج)
+    // index 2  → price         (السعر)
+    // index 3  → details       (التفاصيل)
+    // index 4  → seller        (البائع)
+    // index 5  → phone         (الهاتف)
+    // index 6  → whatsapp      (الواتساب)
+    // index 7  → galleryImgs   (معرض الصور - مفصولة بفاصلة)
+    // index 8  → status        (الحالة: جديد / مستعمل)
+    // index 9  → category      (الفئة/التصنيف)
+    // index 10 → approval      (التفعيل: 0=انتظار, 1=مقبول)
+
+    const CATEGORIES = [
+        { id: 'all',          label: 'الكل',          icon: '🏪' },
+        { id: 'الإلكترونيات', label: 'الإلكترونيات',  icon: '💻' },
+        { id: 'الأزياء',      label: 'الأزياء',       icon: '👗' },
+        { id: 'المنزل',       label: 'المنزل',        icon: '🏠' },
+        { id: 'الجمال',       label: 'الجمال',        icon: '💄' },
+        { id: 'الموبايلات',   label: 'الموبايلات',    icon: '📱' },
+        { id: 'السيارات',     label: 'السيارات',      icon: '🚗' },
+        { id: 'الرياضة',      label: 'الرياضة',       icon: '⚽' },
+        { id: 'الأطفال',      label: 'الأطفال',       icon: '🧸' },
+        { id: 'الأغذية',      label: 'الأغذية',       icon: '🍎' },
+        { id: 'الخدمات',      label: 'الخدمات',       icon: '🔧' },
+        { id: 'العقارات',     label: 'العقارات',      icon: '🏗️' },
+        { id: 'الوظائف',      label: 'الوظائف',       icon: '💼' },
+        { id: 'مستعمل',       label: 'مستعمل',        icon: '🔄' },
+        { id: 'أخرى',         label: 'أخرى',          icon: '📦' }
+    ];
+
+    let allProductsData = [];
+    let activeCat       = 'all';
+    let activeCond      = 'all';
+    let searchQ         = '';
+    let selectedCondition = '';
+
+    // ===== بناء شريط الفئات =====
+    const catsBar = document.getElementById('catsBar');
+    CATEGORIES.forEach(c => {
+        const pill = document.createElement('div');
+        pill.className = 'cat-pill' + (c.id === 'all' ? ' active' : '');
+        pill.dataset.id = c.id;
+        pill.innerHTML = `<span>${c.icon}</span> ${c.label}`;
+        pill.onclick = () => setCat(c.id, pill);
+        catsBar.appendChild(pill);
+    });
+
+    // ===== التهيئة عند تحميل الصفحة =====
     window.onload = init;
 
+    async function init() {
+        // إخفاء السبلاش بعد 2.2 ثانية
+        setTimeout(() => {
+            const splash = document.getElementById('splash');
+            splash.style.opacity = '0';
+            setTimeout(() => splash.style.display = 'none', 800);
+        }, 2200);
+
+        // جلب البيانات مع إعادة المحاولة تلقائياً
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+                const res = await fetch(SCRIPT_URL + '?t=' + Date.now());
+                if (!res.ok) throw new Error('Network error');
+                const json = await res.json();
+                // فلترة الصفوف الفارغة فوراً عند الاستقبال
+                allProductsData = json.filter(function(row, i) {
+                    if (i === 0) return true;
+                    return row[1] && row[1].toString().trim() !== '';
+                });
+                renderProducts();
+                return; // نجح الطلب
+            } catch(e) {
+                console.warn('محاولة ' + attempt + ' فشلت:', e);
+                if (attempt === 3) {
+                    renderProducts(); // أظهر الحالة الفارغة بعد 3 محاولات
+                } else {
+                    await new Promise(r => setTimeout(r, 1000 * attempt));
+                }
+            }
+        }
+    }
+
+    // ===== عرض المنتجات =====
+    function renderProducts() {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = `
+            <div class="add-card" onclick="openAddModal()">
+                <div class="add-icon-wrap"><i class="fa-solid fa-plus"></i></div>
+                <p>إضافة منتج جديد</p>
+            </div>`;
+
+        // فلترة البيانات مع تصحيح الأخطاء:
+        // - تخطي الصف الأول (رؤوس الأعمدة)
+        // - تخطي الصفوف الفارغة
+        // - عرض المقبولة فقط: row[10] == 1
+        // - فلتر الحالة (جديد/مستعمل): row[8]
+        // - فلتر الفئة: row[9]
+        const filtered = allProductsData.filter((row, i) => {
+            if (i === 0) return false;                                          // تخطي رأس الجدول
+            if (!row[1] || row[1].toString().trim() === '') return false;       // تخطي الصفوف الفارغة
+            const approval = String(row[10] ?? '').trim(); if (approval !== '1' && approval !== 'TRUE' && approval !== 'true') return false; // المقبولة فقط
+            if (activeCat  !== 'all' && row[9] !== activeCat)  return false;   // فلتر الفئة (عمود J)
+            if (activeCond !== 'all' && row[8] !== activeCond) return false;   // فلتر الحالة (عمود I) ✅ إصلاح
+            if (searchQ && !row[1]?.toString().toLowerCase().includes(searchQ.toLowerCase())) return false;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML += `
+                <div class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>لا توجد منتجات في هذه الفئة</p>
+                </div>`;
+            return;
+        }
+
+        filtered.forEach(row => {
+            const realIndex = allProductsData.indexOf(row);
+            const cat     = (row[9]  || '').toString();
+            const cond    = (row[8]  || '').toString();   // ✅ الحالة من index 8
+            const catObj  = CATEGORIES.find(c => c.id === cat);
+
+            const condBadge = cond === 'جديد'
+                ? `<div class="badge-condition badge-new">✨ جديد</div>`
+                : cond === 'مستعمل'
+                    ? `<div class="badge-condition badge-used">🔄 مستعمل</div>`
+                    : '';
+            const catBadge = catObj
+                ? `<div class="badge-cat">${catObj.icon} ${cat}</div>`
+                : '';
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-img-wrap">
+                    <img src="${row[0]}" loading="lazy"
+                         onerror="this.src='https://placehold.co/400x300/E8EDF2/9AA5B1?text=صورة+غير+متاحة'">
+                    ${condBadge}${catBadge}
+                </div>
+                <div class="card-body">
+                    <div class="card-name">${row[1]}</div>
+                    <div class="card-seller"><i class="fa-solid fa-user"></i> ${row[4] || 'بائع'}</div>
+                    <div class="card-bottom">
+                        <div class="card-price">${Number(row[2]).toLocaleString('ar-EG')} <span>ج.م</span></div>
+                        <button class="card-cta" onclick="event.stopPropagation(); showDetails(${realIndex})">التفاصيل</button>
+                    </div>
+                </div>`;
+            card.onclick = () => showDetails(realIndex);
+            grid.appendChild(card);
+        });
+    }
+
+    // ===== وظائف الفلترة =====
+    function setCat(id, el) {
+        activeCat = id;
+        document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+        renderProducts();
+    }
+    function setCondFilter(val, el) {
+        activeCond = val;
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        renderProducts();
+    }
+    function filterProducts() {
+        searchQ = document.getElementById('searchInput').value.trim();
+        renderProducts();
+    }
+
+    // ===== تحديد حالة المنتج =====
+    function selectCondition(val) {
+        selectedCondition = val;
+        document.getElementById('optNew').className  = 'radio-opt' + (val === 'جديد'    ? ' sel-new'  : '');
+        document.getElementById('optUsed').className = 'radio-opt' + (val === 'مستعمل' ? ' sel-used' : '');
+    }
+
+    // ===== معاينة الصورة الرئيسية =====
+    function previewMain(input) {
+        if (input.files[0]) {
+            const prev = document.getElementById('mainImgPreview');
+            prev.src = URL.createObjectURL(input.files[0]);
+            prev.style.display = 'block';
+        }
+    }
+
+    // ===== فتح/إغلاق المودالات =====
+    function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function closeViewer()  { document.getElementById('imageViewer').classList.remove('open'); }
+
+    // ===== الإشعار (Toast) =====
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ===== رفع المنتج =====
     async function uploadProduct() {
-        const btn = document.getElementById('uploadBtn');
+        const btn      = document.getElementById('uploadBtn');
         const mainFile = document.getElementById('mainImgInput').files[0];
-        const galleryFiles = document.getElementById('galleryInput').files;
-        if(!mainFile) return alert("يرجى اختيار الصورة الرئيسية!");
-        btn.innerText = "جاري الرفع...";
-        
-        let fd = new FormData(); fd.append('image', mainFile);
-        let res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
-        let data = await res.json();
-        
-        let galleryUrls = [];
-        for(let file of galleryFiles) {
-            let fdG = new FormData(); fdG.append('image', file);
-            let resG = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fdG });
-            let dataG = await resG.json();
-            galleryUrls.push(dataG.data.url);
+        const name     = document.getElementById('name').value.trim();
+        const price    = document.getElementById('price').value.trim();
+        const category = document.getElementById('category').value;
+        const seller   = document.getElementById('seller').value.trim();
+        const phone    = document.getElementById('phone').value.trim();
+
+        // التحقق من البيانات
+        if (!mainFile)          return showToast('⚠️ اختر صورة رئيسية');
+        if (!name)              return showToast('⚠️ اكتب اسم المنتج');
+        if (!price)             return showToast('⚠️ اكتب السعر');
+        if (!category)          return showToast('⚠️ اختر فئة');
+        if (!selectedCondition) return showToast('⚠️ اختر حالة المنتج');
+        if (!seller)            return showToast('⚠️ اكتب اسم البائع');
+        if (!phone)             return showToast('⚠️ اكتب رقم الهاتف');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-pulse"></i> جاري الرفع...';
+
+        try {
+            // رفع الصورة الرئيسية على imgbb
+            const fd = new FormData();
+            fd.append('image', mainFile);
+            const res  = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fd });
+            const data = await res.json();
+            if (!data.success) throw new Error('فشل رفع الصورة الرئيسية');
+            const mainImgUrl = data.data.url;
+
+            // رفع الصور الإضافية
+            const galleryUrls = [];
+            for (const file of document.getElementById('galleryInput').files) {
+                const fdG   = new FormData();
+                fdG.append('image', file);
+                const resG  = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: fdG });
+                const dataG = await resG.json();
+                if (dataG.success) galleryUrls.push(dataG.data.url);
+            }
+
+            // إرسال البيانات للشيت
+            // ✅ إصلاح: "status" بدل "condition" ليتوافق مع سكربت Google
+            await fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    mainImg:    mainImgUrl,
+                    name:       name,
+                    price:      Number(price),
+                    details:    document.getElementById('details').value,
+                    seller:     seller,
+                    phone:      phone,
+                    whatsapp:   document.getElementById('whatsapp').value,
+                    galleryImgs: galleryUrls.join(','),
+                    status:     selectedCondition,   // ✅ الاسم الصحيح
+                    category:   category
+                })
+            });
+
+            showToast('✅ تم رفع المنتج بنجاح! سيظهر بعد المراجعة');
+            setTimeout(() => location.reload(), 2000);
+
+        } catch(e) {
+            console.error(e);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-regular fa-paper-plane"></i> نشر المنتج';
+            showToast('❌ حدث خطأ، حاول مرة أخرى');
         }
-        
-        fetch(SCRIPT_URL, {
-            method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                mainImg: data.data.url,
-                name: document.getElementById('name').value,
-                price: document.getElementById('price').value,
-                details: document.getElementById('details').value,
-                seller: document.getElementById('seller').value,
-                phone: document.getElementById('phone').value,
-                whatsapp: document.getElementById('whatsapp').value,
-                galleryImgs: galleryUrls.join(',')
-            })
-        }).then(() => { alert("تم رفع المنتج!"); location.reload(); });
     }
 
+    // ===== عرض تفاصيل المنتج =====
     function showDetails(index) {
-        const row = allProductsData[index];
-        const gallery = row[7];
-        const galleryArr = gallery ? gallery.split(',') : [];
-        let galleryHtml = galleryArr.map(url => 
-            `<img src="${url}" onclick="openImage('${url}')" style="width:60px; height:60px; object-fit:cover; border-radius:8px; margin:2px; cursor:pointer;">`
-        ).join('');
+        const row    = allProductsData[index];
+        const cond   = (row[8]  || '').toString();   // ✅ الحالة من index 8
+        const cat    = (row[9]  || '').toString();   // ✅ الفئة من index 9
+        const catObj = CATEGORIES.find(c => c.id === cat);
 
-        // تحويل الرقم لصيغة دولية
-        let rawWhatsapp = row[6].toString().trim();
-        let formattedWhatsapp = rawWhatsapp;
-        if (formattedWhatsapp.startsWith('0')) {
-            formattedWhatsapp = '20' + formattedWhatsapp.substring(1);
-        }
+        // الصورة الرئيسية
+        document.getElementById('detailMainImg').src = row[0];
 
+        // الشارات
+        const badges = document.getElementById('detailBadges');
+        badges.innerHTML =
+            (cond === 'جديد'    ? `<div class="badge-condition badge-new">✨ جديد</div>`    : '') +
+            (cond === 'مستعمل' ? `<div class="badge-condition badge-used">🔄 مستعمل</div>` : '') +
+            (catObj ? `<div class="badge-cat">${catObj.icon} ${cat}</div>` : '');
+
+        // معرض الصور
+        const galleryArr  = row[7] ? row[7].toString().split(',').filter(Boolean) : [];
+        const galleryHtml = galleryArr.length
+            ? `<div class="detail-section">
+                 <div class="detail-section-title">صور إضافية</div>
+                 <div class="gallery-strip">
+                   ${galleryArr.map(url => `<img class="gallery-thumb" src="${url}" onclick="openImage('${url}')" loading="lazy">`).join('')}
+                 </div>
+               </div>`
+            : '';
+
+        // تحويل رقم الواتساب للصيغة الدولية
+        let rawWa = (row[6] || '').toString().trim();
+        if (rawWa.startsWith('0')) rawWa = '20' + rawWa.substring(1);
+
+        // محتوى التفاصيل
         document.getElementById('detailsContent').innerHTML = `
-            <h2 style="color:var(--dark-blue); margin-top:0;">${row[1]}</h2>
-            <div class="detail-item"><strong>السعر:</strong> ${row[2]} ج.م</div>
-            <div class="detail-item"><strong>البائع:</strong> ${row[4]}</div>
-            <div class="detail-item"><strong>التفاصيل:</strong> ${row[3]}</div>
-            <div style="margin:10px 0;">${galleryHtml}</div>
-            <div class="contact-title">تواصل مع البائع</div>
-            <div class="contact-icons">
-                <a href="https://wa.me/${formattedWhatsapp}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-                <a href="tel:${row[5]}"><i class="fa-solid fa-phone"></i></a>
+            <div class="detail-title">${row[1]}</div>
+            <div class="detail-price">${Number(row[2]).toLocaleString('ar-EG')} <small>ج.م</small></div>
+            <div class="detail-section">
+                <div class="detail-section-title">معلومات المنتج</div>
+                <div class="detail-info-grid">
+                    <div class="detail-info-item"><div class="dil">البائع</div><div class="div">${row[4] || '—'}</div></div>
+                    <div class="detail-info-item"><div class="dil">الحالة</div><div class="div">${cond || '—'}</div></div>
+                    <div class="detail-info-item"><div class="dil">الفئة</div><div class="div">${catObj ? catObj.icon + ' ' + cat : '—'}</div></div>
+                    <div class="detail-info-item"><div class="dil">الهاتف</div><div class="div">${row[5] || '—'}</div></div>
+                </div>
             </div>
-            <button class="btn" style="background:#888; margin-top:20px;" onclick="document.getElementById('detailsModal').style.display='none'">إغلاق</button>`;
-        document.getElementById('detailsModal').style.display = 'flex';
+            ${row[3] ? `<div class="detail-section"><div class="detail-section-title">الوصف</div><div class="detail-desc">${row[3]}</div></div>` : ''}
+            ${galleryHtml}
+            <div class="contact-section">
+                <div class="contact-label">تواصل مع البائع</div>
+                <div class="contact-btns">
+                    ${rawWa ? `<a class="contact-btn whatsapp" href="https://wa.me/${rawWa}" target="_blank"><i class="fa-brands fa-whatsapp"></i> واتساب</a>` : ''}
+                    ${row[5] ? `<a class="contact-btn phone" href="tel:${row[5]}"><i class="fa-solid fa-phone"></i> اتصال</a>` : ''}
+                </div>
+            </div>`;
+
+        document.getElementById('detailsModal').classList.add('open');
     }
 
+    // ===== عارض الصور الكاملة =====
     function openImage(url) {
         document.getElementById('fullImage').src = url;
-        document.getElementById('imageViewer').style.display = 'flex';
+        document.getElementById('imageViewer').classList.add('open');
     }
+
+    // ===== إغلاق المودالات بالضغط خارجها =====
+    document.getElementById('addModal').onclick     = function(e) { if (e.target === this) closeModal('addModal'); };
+    document.getElementById('detailsModal').onclick = function(e) { if (e.target === this) closeModal('detailsModal'); };
 </script>
 </body>
 </html>
