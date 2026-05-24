@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>سوق إسنا الالكتروني | متجر رقمي احترافي</title>
+    <title>سوق إسنا الرقمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Reem+Kufi+Fun:wght@400;700&display=swap" rel="stylesheet">
     <style>
         @font-face {
@@ -513,7 +513,7 @@
 <!-- SPLASH -->
 <div id="splash">
     <div class="splash-logo">سوق <span>إسنا</span></div>
-    <div class="splash-sub">أول سوق إلكتروني رقمي في إسنا</div>
+    <div class="splash-sub">أول سوق رقمي في إسنا</div>
     <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
 </div>
 
@@ -526,7 +526,7 @@
         <button class="sidebar-close" onclick="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
         <img src="logo.png" alt="لوجو" class="sidebar-logo-img" onerror="this.style.display='none'">
         <div class="sidebar-logo-name">سوق إسنا الرقمي</div>
-        <div class="sidebar-logo-sub">أول سوق إلكتروني رقمي في إسنا</div>
+        <div class="sidebar-logo-sub">أول سوق رقمي في إسنا</div>
     </div>
     <div class="sidebar-section">
         <div class="sidebar-section-title">روابط سريعة</div>
@@ -1481,7 +1481,7 @@
         const row = allProductsData[currentShareIndex];
         const name = row[1] || 'منتج';
         const price = Number(row[2]).toLocaleString('ar-EG');
-        const msg = `🛍️ *${name}*\n💰 السعر: ${price} ج.م\n\n📍 من سوق إسنا الإلكتروني\n${window.location.href}`;
+        const msg = `🛍️ *${name}*\n💰 السعر: ${price} ج.م\n\n📍 من سوق إسنا الرقمي\n${window.location.href}`;
         window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
         closeModal('shareModal');
     }
@@ -1489,7 +1489,7 @@
         const row = allProductsData[currentShareIndex];
         const name = row[1] || 'منتج';
         const price = Number(row[2]).toLocaleString('ar-EG');
-        const text = `${name} - ${price} ج.م | سوق إسنا الإلكتروني`;
+        const text = `${name} - ${price} ج.م | سوق إسنا الرقمي`;
         navigator.clipboard.writeText(text + '\n' + window.location.href).catch(() => {});
         closeModal('shareModal');
         showToast('✅ تم نسخ الرابط');
