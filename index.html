@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>سوق إسنا الرقمي</title>
+    <!-- Open Graph للمعاينة في واتساب وتويتر -->
+    <meta property="og:site_name" content="سوق إسنا الرقمي">
+    <meta property="og:title" id="ogTitle" content="سوق إسنا الرقمي - أول سوق رقمي في إسنا">
+    <meta property="og:description" id="ogDesc" content="تصفح وأعلن عن منتجاتك في سوق إسنا الرقمي">
+    <meta property="og:image" id="ogImage" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:url" id="ogUrl" content="">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Reem+Kufi+Fun:wght@400;700&display=swap" rel="stylesheet">
     <style>
         @font-face {
@@ -758,6 +765,18 @@
             <button class="modal-close" onclick="closeModal('shareModal')">✕</button>
         </div>
         <div class="modal-body">
+            <!-- عرض رابط المنتج المخصص -->
+            <div style="margin-bottom:14px;">
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px;font-weight:600;">🔗 رابط المنتج المباشر</div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <input id="shareLinkDisplay" type="text" readonly
+                        style="flex:1;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:0.78rem;direction:ltr;text-align:left;outline:none;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+                        onclick="this.select()" title="انقر للتحديد">
+                    <button onclick="copyLink()" style="flex-shrink:0;padding:8px 12px;border-radius:10px;background:var(--navy);color:white;border:none;cursor:pointer;font-size:0.8rem;font-family:'Noto Naskh Arabic',serif;font-weight:700;transition:0.2s;" onmouseover="this.style.background='var(--navy-mid)'" onmouseout="this.style.background='var(--navy)'">
+                        <i class="fa-regular fa-copy"></i> نسخ
+                    </button>
+                </div>
+            </div>
             <div class="share-options">
                 <button class="share-opt-btn wa" onclick="shareWhatsapp()">
                     <i class="fa-brands fa-whatsapp"></i> مشاركة على واتساب
@@ -870,6 +889,7 @@
                 });
                 renderProducts();
                 updateFavBadge();
+                checkProductDeepLink(); // فتح المنتج من الرابط المباشر
                 return; // نجح الطلب
             } catch(e) {
                 console.warn('محاولة ' + attempt + ' فشلت:', e);
@@ -1471,28 +1491,73 @@
     // تحديث البادج عند التحميل
     document.addEventListener('DOMContentLoaded', updateFavBadge);
 
+    // ===== Deep Link: فتح المنتج من الرابط المباشر =====
+    function checkProductDeepLink() {
+        const params = new URLSearchParams(window.location.search);
+        const productIndex = params.get('product');
+        if (productIndex !== null) {
+            const idx = parseInt(productIndex, 10);
+            if (!isNaN(idx) && allProductsData[idx] && allProductsData[idx][1]) {
+                const row = allProductsData[idx];
+                const productName = row[1];
+                const productPrice = Number(row[2]).toLocaleString('ar-EG');
+                const productImg = row[0] || '';
+                const productUrl = getProductUrl(idx);
+
+                // تحديث عنوان الصفحة
+                document.title = productName + ' | سوق إسنا الرقمي';
+
+                // تحديث Open Graph meta tags
+                const setMeta = (id, val) => { const el = document.getElementById(id); if (el) el.setAttribute('content', val); };
+                setMeta('ogTitle',  productName + ' - ' + productPrice + ' ج.م');
+                setMeta('ogDesc',   'متاح في سوق إسنا الرقمي بسعر ' + productPrice + ' ج.م');
+                setMeta('ogImage',  productImg);
+                setMeta('ogUrl',    productUrl);
+
+                // فتح تفاصيل المنتج
+                setTimeout(() => showDetails(idx), 300);
+            }
+        }
+    }
+
     // ===== مشاركة المنتج =====
     let currentShareIndex = -1;
     function openShareModal(index) {
         currentShareIndex = index;
+        // عرض الرابط داخل مودال المشاركة
+        const productUrl = getProductUrl(index);
+        const linkDisplay = document.getElementById('shareLinkDisplay');
+        if (linkDisplay) linkDisplay.value = productUrl;
         document.getElementById('shareModal').classList.add('open');
     }
+    // ===== بناء رابط المنتج المخصص =====
+    function getProductUrl(index) {
+        const base = window.location.href.split('?')[0].split('#')[0];
+        return base + '?product=' + index;
+    }
+
     function shareWhatsapp() {
         const row = allProductsData[currentShareIndex];
         const name = row[1] || 'منتج';
         const price = Number(row[2]).toLocaleString('ar-EG');
-        const msg = `🛍️ *${name}*\n💰 السعر: ${price} ج.م\n\n📍 من سوق إسنا الرقمي\n${window.location.href}`;
+        const productUrl = getProductUrl(currentShareIndex);
+        const msg = `🛍️ *${name}*\n💰 السعر: ${price} ج.م\n\n📍 من سوق إسنا الرقمي\n🔗 ${productUrl}`;
         window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
         closeModal('shareModal');
     }
     function copyLink() {
-        const row = allProductsData[currentShareIndex];
-        const name = row[1] || 'منتج';
-        const price = Number(row[2]).toLocaleString('ar-EG');
-        const text = `${name} - ${price} ج.م | سوق إسنا الرقمي`;
-        navigator.clipboard.writeText(text + '\n' + window.location.href).catch(() => {});
+        const productUrl = getProductUrl(currentShareIndex);
+        navigator.clipboard.writeText(productUrl).catch(() => {
+            // fallback لو clipboard API مش شغالة
+            const el = document.createElement('textarea');
+            el.value = productUrl;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        });
         closeModal('shareModal');
-        showToast('✅ تم نسخ الرابط');
+        showToast('✅ تم نسخ رابط المنتج');
     }
 
     // ===== المنتجات المشابهة =====
